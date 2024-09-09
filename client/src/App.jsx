@@ -14,13 +14,13 @@ import Listing from "./pages/shopping-view/Listing"
 import NotFound from "./pages/not-found/NotFound"
 import CheckAuth from "./components/common/CheckAuth"
 import UnAuth from "./pages/un-Auth/UnAuth"
+import { useSelector } from "react-redux"
 
 
 
 function App() {
 
-  const isAuthenticated = false
-  const user = null
+  const {isAuthenticated, user} = useSelector(state => state.auth)  
 
   return (
     <div className="flex flex-col w-full overflow-hidden bg-white">
