@@ -79,7 +79,40 @@ const loginUser = async (req,res)=>{
     }
 }
 
+// Logout 
+
+const logoutUser = (req, res) =>{
+    res.clearCookie('token').json({
+        success: true,
+        message: 'Logout successfully'
+    })
+}
+
+// Auth middleware
+
+const authMiddleware = async (req, res, next)=>{
+    const token = req.cookies.token;
+
+    if(!token) return res.status(401).json({
+        success: false,
+        message: 'Unautherised user'
+    })
+
+    try {
+        const decode = jwt.verify(token, JWT_SECRET_KEY)
+        req.user = decode;
+        next()
+    } catch (error) {
+        res.status(401).json({
+            success: false,
+            message: 'Unautherised user'
+        })
+    }
+}
+
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    logoutUser,
+    authMiddleware
 }
