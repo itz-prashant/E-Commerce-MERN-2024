@@ -4,7 +4,7 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv')
 const authRouter = require('./routes/auth/auth-routes')
-
+const adminProductrouter = require('./routes/admin/products-routs')
 
 const app = express()
 dotenv.config()
@@ -36,6 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use('/api/auth', authRouter)
+app.use('/api/admin/product', adminProductrouter)
 
 app.listen(PORT, ()=>{
     console.log('Server is now running');

@@ -22,6 +22,7 @@ const AdminProducts = () => {
   const [formData, setFormData] = useState(initialFormData)
   const [imageFile, setImageFile] = useState(null)
   const [uploadedImageUrl, setUploadedImageUrl] = useState('')
+  const [imageLoadingState, setImageLoadingState] = useState(false)
 
   function onSubmit(){}
 
@@ -36,7 +37,8 @@ const AdminProducts = () => {
             <SheetTitle>Add New Product</SheetTitle>
           </SheetHeader>
           <ImageUpload imageFile={imageFile} setImageFile={setImageFile} 
-          uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl}/>
+          uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl}
+          setImageLoadingState={setImageLoadingState} />
           <div className='py-5'>
             <Form 
               formControls={addProductFormElement}
