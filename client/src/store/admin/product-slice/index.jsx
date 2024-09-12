@@ -20,7 +20,8 @@ export const fertchAllProduct = createAsyncThunk('/product/get', async ()=>{
     return result.data;
 })
 
-export const editProduct = createAsyncThunk('/product/edit', async (id, formData)=>{
+export const editProduct = createAsyncThunk('/product/edit', async ({id, formData})=>{
+
     const result = await axios.put(`http://localhost:5000/api/admin/product/edit/${id}`, formData, {
         headers: {
             'Content-Type': 'application/json'
@@ -30,7 +31,7 @@ export const editProduct = createAsyncThunk('/product/edit', async (id, formData
 })
 
 export const deleteProduct = createAsyncThunk('/product/delete', async (id)=>{
-    const result = await axios.post(`http://localhost:5000/api/admin/product/delete/${id}`)
+    const result = await axios.delete(`http://localhost:5000/api/admin/product/delete/${id}`)
     return result.data
 })
 
@@ -43,7 +44,6 @@ const AdminProductSlice = createSlice({
             state.isLoading = true
         })
         .addCase(fertchAllProduct.fulfilled, (state,action)=>{
-            console.log(action.payload)
             state.isLoading = false,
             state.productList = action.payload.data
         })

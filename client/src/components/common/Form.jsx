@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Textarea } from '../ui/textarea'
 import { Button } from '../ui/button'
 
-const Form = ({formControls, formData, setFormData, onSubmit, buttonText}) => {
+const Form = ({formControls, formData, setFormData, onSubmit, buttonText, isBtnDisabled}) => {
 
     function randomInputByComponentType(getControlItem){
         let element = null
@@ -90,7 +90,7 @@ const Form = ({formControls, formData, setFormData, onSubmit, buttonText}) => {
                 </div>)
             }
         </div>
-        <Button type="submit" className="mt-2 w-full">{buttonText || 'Submit'}</Button>
+        <Button disabled={isBtnDisabled} type="submit" className="mt-2 w-full">{buttonText || 'Submit'}</Button>
     </form>
   )
 }
