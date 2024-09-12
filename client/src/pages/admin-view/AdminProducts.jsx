@@ -3,7 +3,10 @@ import Form from '@/components/common/Form'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { addProductFormElement } from '@/config'
-import React, { useState } from 'react'
+import { toast, useToast } from '@/hooks/use-toast'
+import { addNewProduct, fertchAllProduct } from '@/store/admin/product-slice'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const initialFormData = {
   image: null,
@@ -23,8 +26,35 @@ const AdminProducts = () => {
   const [imageFile, setImageFile] = useState(null)
   const [uploadedImageUrl, setUploadedImageUrl] = useState('')
   const [imageLoadingState, setImageLoadingState] = useState(false)
+  const { toast } = useToast();
+  const dispatch = useDispatch()
+  const {productList} = useSelector(state=> state.adminProduct)
 
-  function onSubmit(){}
+  function onSubmit(event){
+    event.preventDefault();
+    dispatch(addNewProduct({
+      ...formData, 
+      image: uploadedImageUrl
+    })).then((data)=>{
+      console.log(data);
+      if(data?.payload?.success){
+        dispatch(fertchAllProduct())
+        setOpenCreateProductDialog(false)
+        setImageFile(null)
+        setFormData(initialFormData)
+        toast({
+          title: 'Product add successfully'
+        })
+      }
+    })
+  }
+
+  useEffect(()=>{
+    dispatch(fertchAllProduct())
+  },[dispatch])
+
+  console.log(productList);
+  
 
   return (
     <>
@@ -38,7 +68,7 @@ const AdminProducts = () => {
           </SheetHeader>
           <ImageUpload imageFile={imageFile} setImageFile={setImageFile} 
           uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl}
-          setImageLoadingState={setImageLoadingState} />
+          setImageLoadingState={setImageLoadingState} imageLoadingState={imageLoadingState}/>
           <div className='py-5'>
             <Form 
               formControls={addProductFormElement}

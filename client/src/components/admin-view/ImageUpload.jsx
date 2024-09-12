@@ -3,6 +3,7 @@ import { Label } from '../ui/label'
 import { FileIcon, UploadCloudIcon, XIcon } from 'lucide-react';
 import { Button } from '../ui/button';
 import axios from 'axios';
+import { Skeleton } from '../ui/skeleton';
 
 const ImageUpload = ({imageFile, setImageFile, uploadedImageUrl, setUploadedImageUrl, imageLoadingState, setImageLoadingState}) => {
 
@@ -53,11 +54,13 @@ const ImageUpload = ({imageFile, setImageFile, uploadedImageUrl, setUploadedImag
         <div onDragOver={handleDragOver} onDrop={handleDrop} className='border-2 border-dashed rounded-lg p-4'>
             <input id='image-upload' type="file" className='hidden' ref={inputRef} onChange={handleImageFileChange}/>
             {
-                !imageFile ? 
+                !imageFile ? (
                 <Label htmlFor='image-upload' className="flex flex-col items-center justify-center h-32 cursor-pointer">
                     <UploadCloudIcon className='w-10 h-10 text-muted-foreground mb-2'/>
                     <span>Drag & Drop or Click to upload Image</span>
-                </Label> : <div className='flex items-center justify-center'>
+                </Label> ): (
+                  imageLoadingState ? <Skeleton className='h-10 bg-gray-400'/> :
+                <div className='flex items-center justify-center'>
                     <div className="flex items-center">
                         <FileIcon className='w-8 h-8 text-primary mr-2'/>
                     </div>
@@ -66,7 +69,7 @@ const ImageUpload = ({imageFile, setImageFile, uploadedImageUrl, setUploadedImag
                         <XIcon className='w-4 h-4 '/>
                         <span className='sr-only'>Remove File</span>
                     </Button>
-                </div>
+                </div>)
             }
         </div> 
     </div>
