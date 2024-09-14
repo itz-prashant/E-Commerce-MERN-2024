@@ -1,9 +1,10 @@
+import ProductDetails from '@/components/shopping-view/ProductDetails'
 import ProductFilter from '@/components/shopping-view/ProductFilter'
 import ShoppingProductTile from '@/components/shopping-view/ShoppingProductTile'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { sortOption } from '@/config'
-import { fertchAllFilterProduct } from '@/store/shop/product-slice'
+import { fertchAllFilterProduct, fetchProductdetail } from '@/store/shop/product-slice'
 import { ArrowUpDown } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -25,10 +26,11 @@ function createSearchParamHelper(filterParams){
 const Listing = () => {
 
   const dispatch = useDispatch()
-  const {productList} = useSelector(state => state.shopProduct)
+  const {productList, productDetails} = useSelector(state => state.shopProduct)
   const [filter, setFilter] = useState({})
   const [sort, setSort] = useState(null)
   const [searchParams, setSearchParams] = useSearchParams()
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
 
   function handleSort(value){
     setSort(value)
@@ -72,6 +74,14 @@ const Listing = () => {
     }
   },[filter])
 
+  function handleGetProductDetails(getCurrentProductId){
+    dispatch(fetchProductdetail(getCurrentProductId))
+  }
+  
+  useEffect(()=>{
+    if(productDetails !== null) setOpenDetailsDialog(true)
+  },[productDetails])
+
   return (
     <div className='grid grid-cols-1 md:grid-cols-[200px_1fr] gap-5 p-4 md:p-6'>
       <ProductFilter filter={filter} handlefilter={handleFilter} />
@@ -102,10 +112,12 @@ const Listing = () => {
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-2'>
                   {
                     productList && productList.length > 0 ?
-                    productList.map(productItem=> <ShoppingProductTile product={productItem}/>) : null
+                    productList.map(productItem=> <ShoppingProductTile handleGetProductDetails={handleGetProductDetails} 
+                    product={productItem}/>) : null
                   }
         </div>
       </div>
+      <ProductDetails open={openDetailsDialog} setOpen={setOpenDetailsDialog} productDetails={productDetails}/>
     </div>
   )
 }
