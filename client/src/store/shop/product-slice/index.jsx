@@ -6,8 +6,15 @@ const initialState = {
     productList: []
 }
 
-export const fertchAllFilterProduct = createAsyncThunk('/product/get', async ()=>{
-    const result = await axios.get('http://localhost:5000/api/shop/product/get');
+export const fertchAllFilterProduct = createAsyncThunk('/product/get', async ({filterParams, sortParams})=>{
+
+    const query = new URLSearchParams({
+        ...filterParams,
+        sortBy: sortParams
+    })
+
+    const result = await axios.get(`http://localhost:5000/api/shop/product/get?${query}`);
+    
     return result.data;
 })
 

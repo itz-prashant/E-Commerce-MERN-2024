@@ -7,7 +7,20 @@ import { fertchAllFilterProduct } from '@/store/shop/product-slice'
 import { ArrowUpDown } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { json } from 'react-router-dom'
+import {useSearchParams } from 'react-router-dom'
+
+
+function createSearchParamHelper(filterParams){
+  const queryParams = []
+  
+  for(const [key,value] of Object.entries(filterParams)){
+    if(Array.isArray(value) && value.length > 0){
+      const paramValue = value.join(",")
+      queryParams.push(`${key}=${encodeURIComponent(paramValue)}`)
+    }
+  }
+  return queryParams.join('&')
+}
 
 const Listing = () => {
 
@@ -15,9 +28,9 @@ const Listing = () => {
   const {productList} = useSelector(state => state.shopProduct)
   const [filter, setFilter] = useState({})
   const [sort, setSort] = useState(null)
+  const [searchParams, setSearchParams] = useSearchParams()
 
   function handleSort(value){
-    console.log(value);
     setSort(value)
   }
 
@@ -45,14 +58,22 @@ const Listing = () => {
   useEffect(()=>{
     setSort("price-lowtohigh")
     setFilter(JSON.parse(sessionStorage.getItem('filters')) || {})
-  })
+  },[])
 
   useEffect(()=>{
-    dispatch(fertchAllFilterProduct())
-  },[dispatch])
+    if(filter !==null && sort !==null)
+    dispatch(fertchAllFilterProduct({filterParams: filter, sortParams: sort}))
+  },[dispatch,sort,filter])
+
+  useEffect(()=>{
+    if(filter & Object.keys(filter).length > 0 ){
+      const createQuearyString = createSearchParamHelper(filter)
+      setSearchParams(new URLSearchParams(createQuearyString))
+    }
+  },[filter])
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-[270px_1fr] gap-5 p-4 md:p-6'>
+    <div className='grid grid-cols-1 md:grid-cols-[200px_1fr] gap-5 p-4 md:p-6'>
       <ProductFilter filter={filter} handlefilter={handleFilter} />
       <div className='bg-background w-full rounded-lg shadow-sm'>
         <div className="p-4 border-b flex items-center justify-between">
