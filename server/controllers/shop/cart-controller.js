@@ -45,6 +45,7 @@ const addToCart = async(req, res)=>{
 }
 
 const fetchCartItem = async(req, res)=>{
+    
     try {
         const {userId} = req.params
         if(!userId){
@@ -53,8 +54,8 @@ const fetchCartItem = async(req, res)=>{
                 mesage: 'User id required'
             })
         }
-        const cart =await Cart.findOne({userID}).populate({
-            path: 'item.productID',
+        const cart = await Cart.findOne({userId}).populate({
+            path: 'items.productId',
             select: 'image title price salePrice'
         })
         if(!cart){
@@ -118,7 +119,7 @@ const updateCartItemQuantity = async(req, res)=>{
                 message: 'Cart item not present'
             })
         }
-        cart.item[findCurrentProductIndex].quantity = quantity
+        cart.items[findCurrentProductIndex].quantity = quantity
         await cart.save()
         await cart.populate({
             path: 'items.productId',
@@ -144,7 +145,7 @@ const updateCartItemQuantity = async(req, res)=>{
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            succsess:true,
+            succsess:false,
             mesage: 'Error'
         })
     }
@@ -152,7 +153,7 @@ const updateCartItemQuantity = async(req, res)=>{
 
 const deleteCartItem = async(req, res)=>{
     try {
-        const{userID, productId } = req.params
+        const{userId, productId } = req.params
         if(!userId || !productId) {
             return res.status(400).json({
                 success: false,
@@ -200,7 +201,7 @@ const deleteCartItem = async(req, res)=>{
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            succsess:true,
+            succsess:false,
             mesage: 'Error'
         })
     }

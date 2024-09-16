@@ -4,6 +4,8 @@ import ShoppingProductTile from '@/components/shopping-view/ShoppingProductTile'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { sortOption } from '@/config'
+import { useToast } from '@/hooks/use-toast'
+import { addToCart, fetchCartItems } from '@/store/shop/cart-slice'
 import { fertchAllFilterProduct, fetchProductdetail } from '@/store/shop/product-slice'
 import { ArrowUpDown } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
@@ -27,11 +29,13 @@ const Listing = () => {
 
   const dispatch = useDispatch()
   const {productList, productDetails} = useSelector(state => state.shopProduct)
+  const {user} = useSelector(state => state.auth)
   const [filter, setFilter] = useState({})
   const [sort, setSort] = useState(null)
   const [searchParams, setSearchParams] = useSearchParams()
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
-
+  const {toast} = useToast()
+  
   function handleSort(value){
     setSort(value)
   }
@@ -82,6 +86,17 @@ const Listing = () => {
     if(productDetails !== null) setOpenDetailsDialog(true)
   },[productDetails])
 
+  function handleAddToCart(getCurrentProductId){
+    dispatch(addToCart({userId : user?.id, productId: getCurrentProductId, quantity: 1})).then(data =>{
+      if(data?.payload?.success){
+        dispatch(fetchCartItems(user?.id))
+        toast({
+          title: "Product is added to cart"
+        })
+      }
+    })    
+  }
+
   return (
     <div className='grid grid-cols-1 md:grid-cols-[200px_1fr] gap-5 p-4 md:p-6'>
       <ProductFilter filter={filter} handlefilter={handleFilter} />
@@ -113,7 +128,7 @@ const Listing = () => {
                   {
                     productList && productList.length > 0 ?
                     productList.map(productItem=> <ShoppingProductTile handleGetProductDetails={handleGetProductDetails} 
-                    product={productItem}/>) : null
+                    product={productItem} handleAddToCart={handleAddToCart}/>) : null
                   }
         </div>
       </div>
