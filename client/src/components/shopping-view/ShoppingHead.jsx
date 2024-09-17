@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback } from '../ui/avatar'
 import { logoutUser } from '@/store/auth-slice'
 import CartWrapper from './CartWrapper'
 import { fetchCartItems } from '@/store/shop/cart-slice'
+import { Label } from '../ui/label'
 
 const ShoppingHead = () => {
   const {user} = useSelector(state=> state.auth)
@@ -22,13 +23,23 @@ const ShoppingHead = () => {
     dispatch(logoutUser())
   }
 
+  function handleNavigateToListingPage(currentItem){
+    sessionStorage.clear('filters')
+    const currentfilter = currentItem.id !== 'home' ? {
+      category: [currentItem.id]
+    }: null
+
+    sessionStorage.setItem('filters', JSON.stringify(currentfilter))
+    navigate(currentItem.path)
+}
+
   function MenuItems(){
     return <nav className='flex flex-col mb-b lg:mb-0 lg:items-center gap-6 lg:flex-row'>
       {
-        shoppingViewHeaderMenuItem.map(menuItem=> <Link key={menuItem.id} to={menuItem.path} 
-          className='text-sm font-medium'>
+        shoppingViewHeaderMenuItem.map(menuItem=> <Label key={menuItem.id} onClick={()=> handleNavigateToListingPage(menuItem)}
+          className='text-sm font-medium cursor-pointer'>
             {menuItem.label}
-            </Link>)
+            </Label>)
       }
     </nav>
   }
