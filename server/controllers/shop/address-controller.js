@@ -6,7 +6,7 @@ const addAddress = async (req, res)=>{
 
       if(!userId || !address || !city || !pincode || !phone || !notes){
         return res.status(400).json({
-            succsess: false,
+            success: false,
             message: 'Invalid data provided'
         })
       }
@@ -17,14 +17,14 @@ const addAddress = async (req, res)=>{
 
       await newlyCreatedAddress.save()
       res.status(200).json({
-        succsess: true,
+        success: true,
         data: newlyCreatedAddress
     })
 
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            succsess: false,
+            success: false,
             message: 'Some Error'
         })
     }
@@ -34,7 +34,7 @@ const fetchAddress = async (req, res)=>{
         const {userId} = req.params
         if(!userId){
             return res.status(400).json({
-                succsess: false,
+                success: false,
                 message: 'User Id is required'
             })
         }
@@ -42,14 +42,14 @@ const fetchAddress = async (req, res)=>{
         const addressList = await Address.find({userId})
 
         res.status(200).json({
-            succsess: true,
+            success: true,
             data: addressList
         })
 
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            succsess: false,
+            success: false,
             message: 'Some Error'
         })
     }
@@ -61,7 +61,7 @@ const editAddress = async (req, res)=>{
 
       if(!userId || !addressId){
         return res.status(400).json({
-            succsess: false,
+            success: false,
             message: 'User and address id required'
         })
       }
@@ -72,20 +72,20 @@ const editAddress = async (req, res)=>{
       
       if(!address){
         return res.status(400).json({
-            succsess: false,
+            success: false,
             message: 'Address not found'
         })
       }
 
       res.status(200).json({
-        succsess: true,
+        success: true,
         data: address
     })
 
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            succsess: false,
+            success: false,
             message: 'Some Error'
         })
     }
@@ -96,7 +96,7 @@ const deleteAddress = async (req, res)=>{
 
       if(!userId || !addressId){
         return res.status(400).json({
-            succsess: false,
+            success: false,
             message: 'User and address id required'
         })
       }
@@ -105,20 +105,20 @@ const deleteAddress = async (req, res)=>{
 
       if(!address){
         return res.status(400).json({
-            succsess: false,
+            success: false,
             message: 'Address not found'
         })
       }
 
       res.status(200).json({
-        succsess: true,
+        success: true,
         message: 'Address deleted Successfully'
     })
 
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            succsess: false,
+            success: false,
             message: 'Some Error'
         })
     }

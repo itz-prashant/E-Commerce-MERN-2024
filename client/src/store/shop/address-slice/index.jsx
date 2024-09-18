@@ -12,7 +12,7 @@ export const addNewAddress = createAsyncThunk('/address/add', async (formData)=>
 })
 
 export const fetchAllAddress = createAsyncThunk('/address/get', async (userId)=>{
-    const response = await axios.get(`http://localhost:5000/api/shop/address/add/${userId}`)
+    const response = await axios.get(`http://localhost:5000/api/shop/address/get/${userId}`)
     return response.data
 })
 
@@ -36,11 +36,9 @@ const addressSlice = createSlice({
         })
         .addCase(addNewAddress.fulfilled,(state, action)=>{
             state.isLoading = false
-            state.addressList = action.payload.data
         })
         .addCase(addNewAddress.rejected,(state)=>{
             state.isLoading = true
-            state.addressList = []
         })
         .addCase(fetchAllAddress.pending,(state)=>{
             state.isLoading = true
@@ -56,4 +54,4 @@ const addressSlice = createSlice({
     }
 })
 
-export default addNewAddress.reducers;
+export default addressSlice.reducer;

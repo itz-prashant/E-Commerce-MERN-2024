@@ -2,11 +2,17 @@ import React from 'react'
 import { SheetContent, SheetHeader, SheetTitle } from '../ui/sheet'
 import { Button } from '../ui/button'
 import CartItemsContent from './CartItemsContent'
+import { useNavigate } from 'react-router-dom'
 
 const CartWrapper = ({cartItems}) => {
+
+    const navigate = useNavigate()
+
     const totalCartAmount = cartItems && cartItems.length > 0 ? cartItems.reduce((sum, currentItem)=> sum + (
         currentItem?.salePrice > 0 ? currentItem?.salePrice: currentItem?.price
     )* currentItem?.quantity, 0) :0
+
+
   return (
     <SheetContent className="sm:max-w-md">
         <SheetHeader>
@@ -26,7 +32,7 @@ const CartWrapper = ({cartItems}) => {
                 <div className="font-bold">₹{totalCartAmount}</div>
             </div>
         </div>
-        <Button className='w-full mt-6'>Checkout</Button>
+        <Button onClick={()=> navigate('/shop/checkout')} className='w-full mt-6'>Checkout</Button>
     </SheetContent>
   )
 }

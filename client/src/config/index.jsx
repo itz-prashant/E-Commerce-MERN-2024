@@ -188,34 +188,34 @@ export const addressFormControls = [
         name: "address",
         componentType: "input",
         type: "text",
-        placeholderL: "Enter your address"
+        placeholder: "Enter your address"
     },
     {
         label: "city",
         name: "city",
         componentType: "input",
         type: "text",
-        placeholderL: "Enter your city"
+        placeholder: "Enter your city"
     },
     {
         label: "Pincode",
         name: "pincode",
         componentType: "input",
         type: "text",
-        placeholderL: "Enter your pincode"
+        placeholder: "Enter your pincode"
     },
     {
         label: "Phone",
         name: "phone",
         componentType: "input",
         type: "text",
-        placeholderL: "Enter your phone"
+        placeholder: "Enter your phone"
     },
     {
         label: "Notes",
         name: "notes",
         componentType: "textarea",
         type: "text",
-        placeholderL: "Enter your notes"
+        placeholder: "Enter your notes"
     }
 ]
