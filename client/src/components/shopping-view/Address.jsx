@@ -105,7 +105,7 @@ const Address = () => {
             {
                 addressList && addressList.length > 0 ?
                 addressList.map(addressItem=> <AddressCard setFormData={setFormData} handleEditAddress={handleEditAddress}
-                    handleDeleteAddress={handleDeleteAddress} addressInfo={addressItem}/>) : null
+                handleDeleteAddress={handleDeleteAddress} addressInfo={addressItem}/>) : null
             }
         </div>
         <CardHeader>

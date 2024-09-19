@@ -55,7 +55,7 @@ const ShoppingHead = () => {
           <ShoppingCart className='w-6 h-6'/>
           <span className='sr-only'>User only</span>
         </Button>
-        <CartWrapper cartItems={cartItems && cartItems.items && cartItems.items.length > 0 ? cartItems.items : []}/>
+        <CartWrapper setOpenChartSheet={setOpenChartSheet} cartItems={cartItems && cartItems.items && cartItems.items.length > 0 ? cartItems.items : []}/>
       </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
