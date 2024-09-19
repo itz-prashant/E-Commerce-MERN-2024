@@ -8,6 +8,7 @@ const adminProductrouter = require('./routes/admin/products-routs')
 const shopProductRouter = require('./routes/shop-view/products-routes')
 const shopCartRouter = require('./routes/shop-view/cart-routes')
 const shopAddressRouter = require('./routes/shop-view/address-routes')
+const shopOrderRouter = require('./routes/shop-view/order-routes')
 
 const app = express()
 dotenv.config()
@@ -43,6 +44,7 @@ app.use('/api/admin/product', adminProductrouter)
 app.use('/api/shop/product', shopProductRouter)
 app.use('/api/shop/cart', shopCartRouter)
 app.use('/api/shop/address', shopAddressRouter)
+app.use('/api/shop/order', shopOrderRouter)
 
 app.listen(PORT, ()=>{
     console.log('Server is now running');
