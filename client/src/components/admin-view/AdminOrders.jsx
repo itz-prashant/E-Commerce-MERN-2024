@@ -1,9 +1,10 @@
 import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import { Card, CardHeader,CardContent, CardTitle } from '../ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import { Button } from '../ui/button'
 
-const Orders = () => {
+
+const AdminOrders = () => {
   return (
     <Card>
       <CardHeader>
@@ -39,4 +40,4 @@ const Orders = () => {
   )
 }
 
-export default Orders
+export default AdminOrders

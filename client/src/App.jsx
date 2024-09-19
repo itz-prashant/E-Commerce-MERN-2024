@@ -5,7 +5,6 @@ import { Register } from "./pages/auth/Register"
 import AdminLayout from "./components/admin-view/AdminLayout"
 import AdminDashboard from "./pages/admin-view/AdminDashboard"
 import AdminProducts from "./pages/admin-view/AdminProducts"
-import AdminOrders from "./pages/admin-view/AdminOrders"
 import ShoppingLayout from "./components/shopping-view/ShoppingLayout"
 import Home from "./pages/shopping-view/Home"
 import Checkout from "./pages/shopping-view/Checkout"
@@ -18,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { checkAuth } from "./store/auth-slice"
 import { Skeleton } from "@/components/ui/skeleton"
+import AdminOrdersView from "./pages/admin-view/AdminOrdersView"
 
 
 function App() {
@@ -53,7 +53,7 @@ function App() {
         }>
            <Route path="dashboard" element={<AdminDashboard />}/>
            <Route path="products" element={<AdminProducts />}/>
-           <Route path="orders" element={<AdminOrders />}/>
+           <Route path="orders" element={<AdminOrdersView />}/>
         </Route>
 
         <Route path="/shop" element={
