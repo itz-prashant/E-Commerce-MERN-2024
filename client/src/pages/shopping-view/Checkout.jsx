@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import CartItemsContent from '@/components/shopping-view/CartItemsContent'
 import { Button } from '@/components/ui/button'
 import { createNewOrder } from '@/store/shop/order-slice'
+import { useToast } from '@/hooks/use-toast'
 
 
 const Checkout = () => {
@@ -14,6 +15,7 @@ const Checkout = () => {
   const {approvalURL} = useSelector(state=> state.shopOrder)
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null)
   const [isPaymentStart, setIsPaymentStart] = useState(false)
+  const {toast} = useToast()
   const dispatch = useDispatch()
 
   const totalCartAmount = cartItems && cartItems?.items?.length > 0 ? cartItems?.items.reduce((sum, currentItem)=> sum + (
@@ -22,6 +24,22 @@ const Checkout = () => {
 
 
   function handleInitiatePaypalPayment(){
+
+    if(cartItems.length === 0){
+      toast({
+        title:'Your cart is empty. Please add items to proceed',
+        variant: 'destructive'
+      })
+      return
+    }
+
+    if(currentSelectedAddress === null){
+      toast({
+        title:'Please select one address to proceed',
+        variant: 'destructive'
+      })
+      return
+    }
     const orderData ={
       userId: user?.id, 
       cartId: cartItems?._id,

@@ -5,7 +5,9 @@ import axios from "axios"
 const initialState ={
     approvalURL:null,
     isLoading: false,
-    orderId: null
+    orderId: null,
+    orderList: [],
+    orderDetails: null
 }
 
 export const createNewOrder = createAsyncThunk('/order/createNewOrder', async(orderData)=>{
@@ -20,6 +22,15 @@ export const captureOrder = createAsyncThunk('/order/captureOrder', async({payme
     return response.data
 })
 
+export const getAllOrderByUser = createAsyncThunk('/order/getAllOrder', async(userId)=>{
+    const response = await axios.get(`http://localhost:5000/api/shop/order/list/${userId}`)
+    return response.data
+})
+
+export const getOrderDetails = createAsyncThunk('/order/capturePayment', async(id)=>{
+    const response = await axios.get(`http://localhost:5000/api/shop/order/details/${id}`)
+    return response.data
+})
 
 const shoppingOrderSlice = createSlice({
     name: 'shoppingOrderSlice',
@@ -39,6 +50,28 @@ const shoppingOrderSlice = createSlice({
             state.isLoading = true
             state.approvalURL= null
             state.orderId= null
+        })
+        .addCase(getAllOrderByUser.pending, (state)=>{
+            state.isLoading = true
+        })
+        .addCase(getAllOrderByUser.fulfilled, (state,action)=>{
+            state.isLoading = false
+            state.orderList= action.payload.data
+        })
+        .addCase(getAllOrderByUser.rejected, (state)=>{
+            state.isLoading = true
+            state.orderList= []
+        })
+        .addCase(getOrderDetails.pending, (state)=>{
+            state.isLoading = true
+        })
+        .addCase(getOrderDetails.fulfilled, (state,action)=>{
+            state.isLoading = false
+            state.orderDetails= action.payload.data
+        })
+        .addCase(getOrderDetails.rejected, (state)=>{
+            state.isLoading = true
+            state.orderDetails= null
         })
     }
 })
