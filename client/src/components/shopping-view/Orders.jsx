@@ -5,7 +5,7 @@ import { Button } from '../ui/button'
 import { Dialog } from '../ui/dialog'
 import ShoppingOrdersDetails from './ShoppingOrdersDetails'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllOrderByUser } from '@/store/shop/order-slice'
+import { getAllOrderByUser, getOrderDetails, resetOrderDetails } from '@/store/shop/order-slice'
 import { Badge } from '../ui/badge'
 
 const Orders = () => {
@@ -13,11 +13,22 @@ const Orders = () => {
   const [openDetailsDialog ,setOpenDetailsDialog] = useState(false)
   const dispatch = useDispatch()
   const {user} = useSelector(state=> state.auth)
-  const {orderList} = useSelector(state=> state.shopOrder)
+  const {orderList, orderDetails} = useSelector(state=> state.shopOrder)
+
+  function handleFetchOrderDetails(id){
+    dispatch(getOrderDetails(id))
+  }
+
+  useEffect(()=>{
+    if(orderDetails !== null){
+      setOpenDetailsDialog(true)
+    }
+  },[orderDetails])
 
   useEffect(()=>{
     dispatch(getAllOrderByUser(user?.id))
   },[dispatch])
+
 
   return (
     <Card>
@@ -48,9 +59,12 @@ const Orders = () => {
                 </TableCell>
                 <TableCell>{orderItem?.totalAmount}</TableCell>
                 <TableCell>
-                  <Dialog open={openDetailsDialog} onOpenChange={setOpenDetailsDialog}>
-                    <Button onClick={()=> setOpenDetailsDialog(true)}>View Details</Button>
-                    <ShoppingOrdersDetails />
+                  <Dialog open={openDetailsDialog} onOpenChange={()=>{
+                    setOpenDetailsDialog(false)
+                    dispatch(resetOrderDetails())
+                  }}>
+                    <Button onClick={()=>handleFetchOrderDetails(orderItem?._id)}>View Details</Button>
+                    <ShoppingOrdersDetails orderDetails={orderDetails}/>
                   </Dialog>
                 </TableCell>
               </TableRow> ) : null
