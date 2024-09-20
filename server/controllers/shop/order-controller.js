@@ -1,10 +1,11 @@
 const paypal  = require('../../helpers.js/paypal')
 const Order = require('../../models/order')
+const Cart = require('../../models/cart')
 
 const createOrder=  async (req, res)=>{
     try {
         const {userId, cartItems,addressInfo,orderStatus,paymentMethod,paymentStatus,
-            totalAmount,orderDate,orderUpdateDate,paymentId,payerId} = req.body
+            totalAmount,orderDate,orderUpdateDate,paymentId,payerId,cartId} = req.body
         
          const create_payment_json = {
             intent: 'sale',
@@ -45,7 +46,7 @@ const createOrder=  async (req, res)=>{
             }else{
                 const newlyCreatedOrder = new Order({
                     userId, cartItems,addressInfo,orderStatus,paymentMethod,paymentStatus,
-                    totalAmount,orderDate,orderUpdateDate,paymentId,payerId
+                    totalAmount,orderDate,orderUpdateDate,paymentId,payerId, cartId
                 })
                 await newlyCreatedOrder.save()
                 const approvalURL = paymentInfo.links.find(link=> link.rel === 'approval_url').href
@@ -69,7 +70,31 @@ const createOrder=  async (req, res)=>{
 
 const capturePayment=  async (req, res)=>{
     try {
-        
+        const {paymentId, payerId, orderId} = req.body
+        let order = await Order.findById(orderId)
+
+        if(!order){
+            return res.status(404).json({
+                success: false,
+                message: 'Order can not be found'
+            })
+        }
+
+        order.paymentStatus = 'paid'
+        order.orderStatus = 'confirmed'
+        order.paymentId = paymentId
+        order.payerId = payerId
+
+        const getCartId = order.cartId
+        await Cart.findByIdAndUpdate(getCartId)
+
+        await order.save()
+        res.status(200).json({
+            success: true,
+            message: 'Order confirmed',
+            data: order
+        })
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
