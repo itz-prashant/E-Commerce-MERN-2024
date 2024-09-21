@@ -1,6 +1,6 @@
 import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
 import { Button } from '../ui/button'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,6 +16,7 @@ const ShoppingHead = () => {
   const {user} = useSelector(state=> state.auth)
   const [opanChartSheet, setOpenChartSheet] = useState(false)
   const {cartItems} = useSelector(state => state.shopCart)
+  const [searchParams, setsearchParams]  =useSearchParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -25,15 +26,20 @@ const ShoppingHead = () => {
 
   function handleNavigateToListingPage(currentItem){
     sessionStorage.clear('filters')
-    const currentfilter = currentItem.id !== 'home' ? {
+    const currentfilter = currentItem.id !== 'home' && currentItem.id !== 'products' ? {
       category: [currentItem.id]
     }: null
 
     sessionStorage.setItem('filters', JSON.stringify(currentfilter))
+
+    location.pathname.includes('listing') && currentfilter !== null ? setsearchParams(new URLSearchParams(
+      `?category=${currentItem.id}`
+    )): 
     navigate(currentItem.path)
 }
 
   function MenuItems(){
+    const location = useLocation()
     return <nav className='flex flex-col mb-b lg:mb-0 lg:items-center gap-6 lg:flex-row'>
       {
         shoppingViewHeaderMenuItem.map(menuItem=> <Label key={menuItem.id} onClick={()=> handleNavigateToListingPage(menuItem)}

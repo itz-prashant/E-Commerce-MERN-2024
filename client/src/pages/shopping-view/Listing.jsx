@@ -35,6 +35,8 @@ const Listing = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
   const {toast} = useToast()
+
+  const categorySearchParams= searchParams.get('category')
   
   function handleSort(value){
     setSort(value)
@@ -64,7 +66,7 @@ const Listing = () => {
   useEffect(()=>{
     setSort("price-lowtohigh")
     setFilter(JSON.parse(sessionStorage.getItem('filters')) || {})
-  },[])
+  },[categorySearchParams])
 
   useEffect(()=>{
     if(filter !==null && sort !==null)
