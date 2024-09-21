@@ -8,10 +8,12 @@ import { useToast } from '@/hooks/use-toast'
 const CartItemsContent = ({cartItem}) => {
     const dispatch = useDispatch()
     const {user} = useSelector(state => state.auth)
+    const {cartItems} = useSelector(state => state.shopCart)
+    const {productList} = useSelector(state => state.shopProduct)
     const {toast} = useToast()
 
     function handleCartItemDelete(getCartItem){
-        dispatch(deleteCartItem({userId: user?.id, productId: getCartItem.productId})).then((data)=>{
+        dispatch(deleteCartItem({userId: user?.id, productId: getCartItem?.productId})).then((data)=>{
             if(data?.payload?.succes){
                 toast({
                     title: "Cart item is deleted"
@@ -21,6 +23,28 @@ const CartItemsContent = ({cartItem}) => {
     }
 
     function handleUpdateQuantity(getCartItem, typeOfAction){
+
+        if(typeOfAction === 'plus'){
+            let getCartItems = cartItems.items || []
+            if(getCartItems.length){
+              const indexOfCurrentCartitems = getCartItems.findIndex(item=> item.productId === getCartItem?.productId)
+        
+              const getCurrentProductIndex = productList.findIndex(product=> product?._id === getCartItem?.productId)
+                const getTotalStock = productList[getCurrentProductIndex].totalStock
+        
+              if(indexOfCurrentCartitems > -1){
+                const quantity = getCartItems[indexOfCurrentCartitems].quantity
+                if(quantity +1 > getTotalStock){
+                  toast({
+                    title: `Only ${quantity} quantity can be added for this item`,
+                    variant: 'destructive'
+                  })
+                  return
+                }
+              }
+            }    
+        }        
+
         dispatch(updateCart({userId: user?.id, productId: getCartItem?.productId, quantity: typeOfAction ==="plus" ? getCartItem?.quantity+1 : getCartItem?.quantity - 1})).then((data)=>{
             if(data?.payload?.succes){
                 toast({
@@ -58,4 +82,4 @@ const CartItemsContent = ({cartItem}) => {
   )
 }
 
-export default CartItemsContent
+export default CartItemsContent;

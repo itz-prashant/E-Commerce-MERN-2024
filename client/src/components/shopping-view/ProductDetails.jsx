@@ -13,9 +13,26 @@ import { setProductDetails } from '@/store/shop/product-slice'
 const ProductDetails = ({open, setOpen, productDetails}) => {
     const dispatch = useDispatch()
     const {user} = useSelector(state => state.auth)
+    const {cartItems} = useSelector(state => state.shopCart)
+    const {productList} = useSelector(state => state.shopProduct)
     const {toast} = useToast() 
 
-    function handleAddToCart(getCurrentProductId){
+    function handleAddToCart(getCurrentProductId, getTotalStock){
+        let getCartItems = cartItems.items || []
+    if(getCartItems.length){
+      const indexOfCurrentitems = getCartItems.findIndex(item=> item?.productId === getCurrentProductId)
+
+      if(indexOfCurrentitems > -1){
+        const quantity = getCartItems[indexOfCurrentitems].quantity
+        if(quantity +1 > getTotalStock){
+          toast({
+            title: `Only ${quantity} quantity can be added for this item`,
+            variant: 'destructive'
+          })
+          return
+        }
+      }
+    }
         dispatch(addToCart({userId : user?.id, productId: getCurrentProductId, quantity: 1})).then(data =>{
           if(data?.payload?.success){
             dispatch(fetchCartItems(user?.id))
@@ -60,7 +77,9 @@ const ProductDetails = ({open, setOpen, productDetails}) => {
                 </div>
                 </div>
                 <div className='mt-5 mb-5'>
-                    <Button onClick={()=> handleAddToCart(productDetails?._id)} className='w-full'>Add to cart</Button>
+                    {
+                        productDetails?.totalStock === 0 ? <Button className='w-full opacity-60 cursor-not-allowed'>Out of stock</Button> : <Button onClick={()=> handleAddToCart(productDetails?._id, productDetails?.totalStock)} className='w-full'>Add to cart</Button>
+                    }
                 </div>
                 <Separator />
                 <div className='max-h-[300px] overflow-auto'>

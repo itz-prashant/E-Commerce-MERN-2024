@@ -30,6 +30,7 @@ const Listing = () => {
   const dispatch = useDispatch()
   const {productList, productDetails} = useSelector(state => state.shopProduct)
   const {user} = useSelector(state => state.auth)
+  const {cartItems} = useSelector(state => state.shopCart)
   const [filter, setFilter] = useState({})
   const [sort, setSort] = useState(null)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -88,7 +89,22 @@ const Listing = () => {
     if(productDetails !== null) setOpenDetailsDialog(true)
   },[productDetails])
 
-  function handleAddToCart(getCurrentProductId){
+  function handleAddToCart(getCurrentProductId, getTotalStock){
+    let getCartItems = cartItems.items || []
+    if(getCartItems.length){
+      const indexOfCurrentitems = getCartItems.findIndex(item=> item.productId === getCurrentProductId)
+
+      if(indexOfCurrentitems > -1){
+        const quantity = getCartItems[indexOfCurrentitems].quantity
+        if(quantity +1 > getTotalStock){
+          toast({
+            title: `Only ${quantity} quantity can be added for this item`,
+            variant: 'destructive'
+          })
+          return
+        }
+      }
+    }
     dispatch(addToCart({userId : user?.id, productId: getCurrentProductId, quantity: 1})).then(data =>{
       if(data?.payload?.success){
         dispatch(fetchCartItems(user?.id))
@@ -98,8 +114,6 @@ const Listing = () => {
       }
     })    
   }
-
-  console.log(productList);
   
 
   return (
