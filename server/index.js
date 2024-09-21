@@ -9,6 +9,7 @@ const shopProductRouter = require('./routes/shop-view/products-routes')
 const shopCartRouter = require('./routes/shop-view/cart-routes')
 const shopAddressRouter = require('./routes/shop-view/address-routes')
 const shopOrderRouter = require('./routes/shop-view/order-routes')
+const adminOrderRouter = require('./routes/admin/order-routes')
 
 const app = express()
 dotenv.config()
@@ -41,6 +42,7 @@ app.use(express.urlencoded({extended: true}));
 
 app.use('/api/auth', authRouter)
 app.use('/api/admin/product', adminProductrouter)
+app.use('/api/admin/order', adminOrderRouter)
 app.use('/api/shop/product', shopProductRouter)
 app.use('/api/shop/cart', shopCartRouter)
 app.use('/api/shop/address', shopAddressRouter)
