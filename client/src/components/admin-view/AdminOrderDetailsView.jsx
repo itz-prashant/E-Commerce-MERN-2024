@@ -3,8 +3,10 @@ import { DialogContent } from '../ui/dialog'
 import { Label } from '../ui/label'
 import { Separator } from '../ui/separator'
 import Form from '../common/Form'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Badge } from '../ui/badge'
+import { getAllOrderForAdmin, getOrderDetailsForAdmin, updateOrderStatus } from '@/store/admin/order-slice'
+import { useToast } from '@/hooks/use-toast'
 
 const initialFormData = {
     status: ''
@@ -14,11 +16,24 @@ const AdminOrderDetailsView = ({orderDetails}) => {
 
     const [formData, setFormData]  = useState(initialFormData)
     const {user} = useSelector(state=> state.auth)
-
+    const dispatch = useDispatch()
+    const {toast} = useToast()
 
     function handleUpdateStatus(e){
         e.preventDefault()
+        const {status} = formData
+        dispatch(updateOrderStatus({id: orderDetails?._id,orderStatus: status})).then((data)=>{
+           if(data?.payload?.success){
+            dispatch(getOrderDetailsForAdmin(orderDetails?._id))
+            dispatch(getAllOrderForAdmin())
+            setFormData(initialFormData)
+            toast({
+                title: data?.payload?.message
+            })
+           }
+        })
     }
+    
 
   return (
     <DialogContent className="sm:max-w-[600px]">
@@ -35,7 +50,8 @@ const AdminOrderDetailsView = ({orderDetails}) => {
                 <div className="flex mt-1 items-center justify-between">
                     <div className="font-medium">Order Status</div>
                     <Label>
-                    <Badge className={`py-1 px-3 ${orderDetails?.orderStatus === 'confirmed' ? 'bg-green-500': 'bg-red-500'}`}>{orderDetails?.orderStatus}</Badge>
+                    <Badge className={`py-1 px-3 ${orderDetails?.orderStatus === 'confirmed' ? 'bg-green-500' :
+                  orderDetails?.orderStatus === 'rejected' ? 'bg-red-600' : 'bg-black'}`}>{orderDetails?.orderStatus}</Badge>
                     </Label>
                 </div>
                 <div className="flex mt-1 items-center justify-between">

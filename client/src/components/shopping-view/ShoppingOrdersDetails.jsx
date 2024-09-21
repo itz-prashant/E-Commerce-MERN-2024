@@ -24,7 +24,8 @@ const ShoppingOrdersDetails = ({orderDetails}) => {
                 <div className="flex mt-1 items-center justify-between">
                     <div className="font-medium">Order Status</div>
                     <Label>
-                    <Badge className={`py-1 px-3 ${orderDetails?.orderStatus === 'confirmed' ? 'bg-green-500': 'bg-red-500'}`}>{orderDetails?.orderStatus}</Badge>
+                    <Badge className={`py-1 px-3 ${orderDetails?.orderStatus === 'confirmed' ? 'bg-green-500' :
+                  orderDetails?.orderStatus === 'rejected' ? 'bg-red-600' : 'bg-black'}`}>{orderDetails?.orderStatus}</Badge>
                     </Label>
                 </div>
                 <div className="flex mt-1 items-center justify-between">
