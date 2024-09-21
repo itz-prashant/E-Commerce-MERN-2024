@@ -25,7 +25,7 @@ const AdminOrders = () => {
     if(orderDetails !== null){
       setOpenDetailsDialog(true)
     }
-  })
+  },[orderDetails])
 
   useEffect(()=>{
     dispatch(getAllOrderForAdmin())
