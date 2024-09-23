@@ -20,6 +20,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import AdminOrdersView from "./pages/admin-view/AdminOrdersView"
 import PaypalReturn from "./pages/shopping-view/PaypalReturn"
 import PaymentSuccess from "./pages/shopping-view/PaymentSuccess"
+import Search from "./pages/shopping-view/Search"
 
 
 function App() {
@@ -69,6 +70,7 @@ function App() {
            <Route path="listing" element={<Listing />}/>
            <Route path="paypal-return" element={<PaypalReturn />}/>
            <Route path="payment-success" element={<PaymentSuccess />}/>
+           <Route path="search" element={<Search />}/>
         </Route>
         <Route path="*" element={<NotFound />}/>
         <Route path="/unAuth" element={<UnAuth />}/>

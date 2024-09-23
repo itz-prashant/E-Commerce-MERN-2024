@@ -26,7 +26,7 @@ const ShoppingHead = () => {
 
   function handleNavigateToListingPage(currentItem){
     sessionStorage.clear('filters')
-    const currentfilter = currentItem.id !== 'home' && currentItem.id !== 'products' ? {
+    const currentfilter = currentItem.id !== 'home' && currentItem.id !== 'products' && currentItem.id !== 'search' ? {
       category: [currentItem.id]
     }: null
 
