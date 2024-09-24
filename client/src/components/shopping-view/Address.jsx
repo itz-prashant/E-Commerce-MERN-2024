@@ -15,7 +15,7 @@ const initialAddressFormData = {
     notes: ''
 }
 
-const Address = ({setCurrentSelectedAddress}) => {
+const Address = ({setCurrentSelectedAddress,selectedId}) => {
 
     const [formData, setFormData] = useState(initialAddressFormData)
     const [currentEditId, setCurrentEditId] = useState(null)
@@ -104,7 +104,7 @@ const Address = ({setCurrentSelectedAddress}) => {
         <div className='mb-5 p-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'>
             {
                 addressList && addressList.length > 0 ?
-                addressList.map(addressItem=> <AddressCard setCurrentSelectedAddress={setCurrentSelectedAddress} setFormData={setFormData} handleEditAddress={handleEditAddress}
+                addressList.map(addressItem=> <AddressCard selectedId={selectedId} setCurrentSelectedAddress={setCurrentSelectedAddress} setFormData={setFormData} handleEditAddress={handleEditAddress}
                 handleDeleteAddress={handleDeleteAddress} addressInfo={addressItem}/>) : null
             }
         </div>

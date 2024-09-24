@@ -3,11 +3,12 @@ import { Card, CardContent, CardFooter } from '../ui/card'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
 
-const AddressCard = ({addressInfo, handleDeleteAddress, handleEditAddress, setCurrentSelectedAddress}) => {
+const AddressCard = ({addressInfo, handleDeleteAddress, handleEditAddress, setCurrentSelectedAddress, selectedId}) => {
 
   return (
-    <Card onClick={setCurrentSelectedAddress? ()=> setCurrentSelectedAddress(addressInfo): null}>
-        <CardContent className="grid py-4 gap-3">
+    <Card className={`cursor-pointer ${selectedId?._id === addressInfo?._id ? 'border-2 border-black' : ""}`}
+    onClick={setCurrentSelectedAddress? ()=> setCurrentSelectedAddress(addressInfo): null}>
+        <CardContent className={`grid py-4 gap-3 mb-2 `}>
             <Label>Address: {addressInfo?.address}</Label>
             <Label>City: {addressInfo?.city}</Label>
             <Label>Pincode: {addressInfo?.pincode}</Label>
