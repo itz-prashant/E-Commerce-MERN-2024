@@ -11,13 +11,14 @@ const AdminDashboard = () => {
   const [imageLoadingState, setImageLoadingState] = useState(false)
   const dispatch=  useDispatch()
   const {featureImageList} = useSelector(state=> state.commonFeature)
-  console.log(featureImageList);
   
 
   function handleUploadFeatureImage(){
     dispatch(addFeatureImages(uploadedImageUrl)).then((data)=>{
       if(data?.payload?.success){
         dispatch(getFeatureImages())
+        setImageFile(null)
+        setUploadedImageUrl('')
       }
     })
   }
@@ -33,6 +34,16 @@ const AdminDashboard = () => {
           // isEditMode = {currentEditId !== null}
           setImageLoadingState={setImageLoadingState} isCustomStyling={true} imageLoadingState={imageLoadingState}/>
           <Button onClick={handleUploadFeatureImage} className='mt-4 w-full'>Upload</Button>
+          <div className='flex flex-col gap-4 mt-5'>
+            {
+              featureImageList && featureImageList.length >0 ? 
+              featureImageList.map(featureImage=> <div>
+                <div className='relative'>
+                <img src={featureImage.image} alt="" />
+                </div>
+              </div>) :null
+            }
+          </div>
     </div>
   )
 }

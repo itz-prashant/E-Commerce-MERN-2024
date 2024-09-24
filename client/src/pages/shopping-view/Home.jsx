@@ -12,12 +12,14 @@ import { useNavigate } from 'react-router-dom'
 import { addToCart, fetchCartItems } from '@/store/shop/cart-slice'
 import { useToast } from '@/hooks/use-toast'
 import ProductDetails from '@/components/shopping-view/ProductDetails'
+import { getFeatureImages } from '@/store/common-slice'
 
 const Home = () => {
 
   const [currentSlide, setCurrentslide] = useState(0)
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
   const {productList, productDetails} = useSelector(state=> state.shopProduct)
+  const {featureImageList} = useSelector(state=> state.commonFeature)
   const slides = [banner1,banner2, banner3]
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -81,14 +83,18 @@ function handleAddToCart(getCurrentProductId){
   })    
 }
 
+useEffect(()=>{
+  dispatch(getFeatureImages())
+},[dispatch])
+
   return (
     <div className='flex flex-col min-h-screen'>
       <div className="relative w-full h-[500px] overflow-hidden">
         {
-          slides.map((slide,index)=>(
-            <img src={slide} alt="" key={index} className={`${index === currentSlide ? 'opacity-100': 'opacity-0'} absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}/>
-
-          ))
+          featureImageList && featureImageList.length > 0 ?
+          featureImageList.map((slide,index)=>(
+            <img src={slide?.image} alt="" key={index} className={`${index === currentSlide ? 'opacity-100': 'opacity-0'} absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}/>
+          )): null
         }
         <Button onClick={()=> setCurrentslide(prevSlide=> (prevSlide -1 + slides.length) % slides.length)} 
         variant="outline" size='icon' className='absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80'>

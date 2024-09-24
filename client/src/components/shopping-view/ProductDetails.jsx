@@ -31,8 +31,6 @@ const ProductDetails = ({open, setOpen, productDetails}) => {
             dispatch(getReview(productDetails?._id))
         }
     },[productDetails])
-
-    console.log(reviews);
     
 
     function handleAddToCart(getCurrentProductId, getTotalStock){
