@@ -57,8 +57,10 @@ const ShoppingHead = () => {
   function HeaderRightContent(){
     return <div className='flex flex-col lg:flex-row lg:items-center gap-4'>
       <Sheet open={opanChartSheet} onOpenChange={()=>setOpenChartSheet(false)}>
-        <Button onClick={()=> setOpenChartSheet(true)} variant="outline" size='icon'>
+        <Button className="relative" 
+        onClick={()=> setOpenChartSheet(true)} variant="outline" size='icon'>
           <ShoppingCart className='w-6 h-6'/>
+          <span className='absolute -top-1 font-bold right-1 text-sm'>{cartItems?.items?.length || 0}</span>
           <span className='sr-only'>User only</span>
         </Button>
         <CartWrapper setOpenChartSheet={setOpenChartSheet} cartItems={cartItems && cartItems.items && cartItems.items.length > 0 ? cartItems.items : []}/>
